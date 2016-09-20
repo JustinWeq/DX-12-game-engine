@@ -9,7 +9,7 @@ public:
 	//defualt constructor-- creates a new instance of BufferedView with defualt parameters
 	BufferedView();
 
-	//decontructor-- cleans up memory for the BufferedView instance
+	//decontructor-- cleans up memory for the BufferedView instanceee
 	~BufferedView();
 
 	//cleans up memory for the BufferedView instance
