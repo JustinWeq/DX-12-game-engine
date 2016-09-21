@@ -20,7 +20,23 @@ public:
 	//the windows form to use for the output window
 	bool initBufferedView(D3DInterface* handle, WindowsForm* form);
 
-	void present(ID3D12CommandList** commandLists,D3DInterface* handle);
+	// exectutes the command lists on the command queue that is in the passed in
+	// d3d12 interface instance
+	// commandLists- a pointer to the array of command lists to execute
+	// handle- a pointer to the d3d interface instance with the queue to use for execution
+	bool present(unsigned char numberOfLists,ID3D12CommandList** commandLists,D3DInterface* handle);
+
+	//returns the frame index
+	int getFrameIndex();
+
+	//returns the render targets
+	ID3D12Resource* getRenderTarget(int index);
+
+	//returns the descriptor heap
+	ID3D12DescriptorHeap* getDescriptorHeap();
+
+	//returns the descriptor size
+	int getDescriptorSize();
 
 private:
 	//The swap chain that is used to transition frames

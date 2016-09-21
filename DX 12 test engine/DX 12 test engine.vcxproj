@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BufferedView.cpp" />
+    <ClCompile Include="ClearRenderTargetViewCommandThread.cpp" />
     <ClCompile Include="CommandThread.cpp" />
     <ClCompile Include="D3DInterface.cpp" />
     <ClCompile Include="main.cpp" />
@@ -27,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BufferedView.h" />
+    <ClInclude Include="ClearRenderTargerViewCommandThread.h" />
     <ClInclude Include="CommandThread.h" />
     <ClInclude Include="D3DInterface.h" />
     <ClInclude Include="d3dx12.h" />

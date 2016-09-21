@@ -110,3 +110,43 @@ bool BufferedView::initBufferedView(D3DInterface* handle, WindowsForm* form)
 		rtvHandle.Offset(1, m_rtvDescriptorSize);
 	}
 }
+
+//returns the frame index
+int BufferedView::getFrameIndex()
+{
+	//return the frame index the back buffer is currently on
+	return m_swapChain->GetCurrentBackBufferIndex();
+}
+
+//returns the render targets
+ID3D12Resource* BufferedView::getRenderTarget(int index)
+{
+	return m_renderTargets[index];
+}
+
+//returns the descriptor heap
+ID3D12DescriptorHeap* BufferedView::getDescriptorHeap()
+{
+	return m_rtvDescriptorHeap;
+}
+
+//returns the descriptor size
+int BufferedView::getDescriptorSize()
+{
+	return m_rtvDescriptorSize;
+}
+
+// exectutes the command lists on the command queue that is in the passed in
+// d3d12 interface instance
+// commandLists- a pointer to the array of command lists to execute
+// handle- a pointer to the d3d interface instance with the queue to use for execution
+bool BufferedView::present(unsigned char numberOfLists, ID3D12CommandList** commandLists, D3DInterface* handle)
+{
+	HRESULT result;
+
+	//execute the comand lists
+	handle->getCommandQueue()->ExecuteCommandLists(numberOfLists, commandLists);
+
+	//signal the fences
+	result = handle->getCommandQueue()->Signal(m_fence)
+}
