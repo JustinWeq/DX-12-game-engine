@@ -26,6 +26,14 @@ public:
 
 	// cleans up memory for the command thread
 	virtual void close();
+
+	//signals the fence for this command thread
+	// commandQueue- the command queue to siganl the fence with
+	// frameIndex- the current frame the buffer is on
+	bool signalFence(ID3D12CommandQueue* commandQueue,int frameIndex);
+
+	//returns the command list
+	ID3D12CommandList* getCommandList();
 private:
 
 	

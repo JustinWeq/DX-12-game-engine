@@ -71,6 +71,24 @@ CommandThread::~CommandThread()
 
 }
 
+ //signals the fence for this command thread
+ // commandQueue- the command queue to signal the fence with
+ // frameIndex- the current frame the buffer is on
+ bool CommandThread::signalFence(ID3D12CommandQueue* commandQueue,int frameIndex)
+ {
+	 HRESULT result;
+
+	 //signal the fence
+	 result = commandQueue->Signal(m_fence[frameIndex], m_fenceValue[frameIndex]);
+	 if (FAILED(result))
+	 {
+		 //return false since the command queue failed to signal the fence
+		 return false;
+	 }
+
+	 return true;
+ }
+
  // resets the command list and the command allocator
 bool CommandThread::reset()
 {
@@ -96,4 +114,10 @@ bool CommandThread::reset()
 
 	//command thread was reset so return true
 	return true;
+}
+
+//returns the command list
+ID3D12CommandList* CommandThread::getCommandList()
+{
+	return m_commandList;
 }

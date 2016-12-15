@@ -140,13 +140,41 @@ int BufferedView::getDescriptorSize()
 // d3d12 interface instance
 // commandLists- a pointer to the array of command lists to execute
 // handle- a pointer to the d3d interface instance with the queue to use for execution
-bool BufferedView::present(unsigned char numberOfLists, ID3D12CommandList** commandLists, D3DInterface* handle)
+bool BufferedView::present(unsigned char numberOfLists, CommandThread** commandThreads, D3DInterface* handle)
 {
 	HRESULT result;
+	//build up lost of command lists
+	ID3D12CommandList** commandLists = new ID3D12CommandList*[numberOfLists];
+
+	//fill the list
+	for (int i = 0; i < numberOfLists; i++)
+	{
+		commandLists[i] = commandThreads[i]->getCommandList();
+	}
 
 	//execute the comand lists
 	handle->getCommandQueue()->ExecuteCommandLists(numberOfLists, commandLists);
 
 	//signal the fences
-	result = handle->getCommandQueue()->Signal(m_fence)
+	for (int i = 0; i < numberOfLists; i++)
+	{
+		bool signaled;
+		//signal this thread
+		signaled = commandThreads[i]->signalFence(handle->getCommandQueue(), getFrameIndex());
+		if (!signaled)
+		{
+			//failed to signal fence
+			return false;
+		}
+	}
+
+	//present the swap chain
+	result = m_swapChain->Present(0, 0);
+	if (FAILED(result))
+	{
+		//failed to present the swap chain
+		return false;
+	}
+
+	return true;
 }

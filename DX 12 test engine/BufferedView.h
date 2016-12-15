@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "D3DInterface.h"
 #include "win32app.h"
+#include "CommandThread.h"
 class BufferedView
 {
 
@@ -24,7 +25,7 @@ public:
 	// d3d12 interface instance
 	// commandLists- a pointer to the array of command lists to execute
 	// handle- a pointer to the d3d interface instance with the queue to use for execution
-	bool present(unsigned char numberOfLists,ID3D12CommandList** commandLists,D3DInterface* handle);
+	bool present(unsigned char numberOfLists,CommandThread** commandThreads,D3DInterface* handle);
 
 	//returns the frame index
 	int getFrameIndex();
