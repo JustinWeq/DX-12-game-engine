@@ -1,7 +1,7 @@
 #pragma once
 #include "CommandThread.h"
 #include "BufferedView.h"
-class ClearRenderTargetViewCommandThread : CommandThread
+class ClearRenderTargetViewCommandThread : public CommandThread
 {
 public:
 	// a pure virtual function, this needs to be overridden with a specific class that inherits from this abstract base class,
