@@ -24,6 +24,12 @@ public:
 	//returns the hwnd for the windows form
 	HWND getHwnd();
 
+	//returns the height of the window for this form
+	int GetWindowHeight();
+
+	//reutrns the width of the windows for this form
+	int GetWindowWidth();
+
 	const static bool FULL_SCREEN = false;
 
 	/// the message handler for the windows form, this is called when the form receives a new message such as the exit button being clicked
@@ -58,6 +64,12 @@ private:
 
 	/// a bool indicatiing whether to quit the form or not
 	bool m_quit;
+
+	//the width of the window
+	int m_width;
+
+	//the height of the window
+	int m_height;
 
 	
 

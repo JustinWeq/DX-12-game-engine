@@ -41,7 +41,6 @@ bool D3DInterface::initD3D()
 		if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
 		{
 			//do not use a software device.
-			adapterIndex++;
 			continue;
 		}
 
@@ -74,6 +73,10 @@ bool D3DInterface::initD3D()
 
 	//use all of the defualt values
 	D3D12_COMMAND_QUEUE_DESC cqDesc{};
+	//no flags for this direct command queue
+	cqDesc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
+	// set the type to direct so the gpu directly executes the queue
+	cqDesc.Type = D3D12_COMMAND_LIST_TYPE_DIRECT;
 	
 	//create the actual command queue
 	result = m_device->CreateCommandQueue(&cqDesc, IID_PPV_ARGS(&m_commandQueue));

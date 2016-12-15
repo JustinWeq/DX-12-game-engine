@@ -36,11 +36,13 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE, LPSTR, int cmdShow)
 		//set up the D3D interface
 		device->initD3D();
 
+		//set up the clear render target command thread
+		commandThread->init(device);
+
 		//set up the buffered view
 		renderTarget->initBufferedView(device, form);
 
-		//set up the clear render target command thread
-		commandThread->init(device);
+
 
 		//run the windows form in  a thread
 		formThread = std::thread(runWindowsForm);

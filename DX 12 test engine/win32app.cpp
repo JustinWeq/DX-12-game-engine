@@ -148,6 +148,10 @@ void WindowsForm::initWindows(int& width, int& height)
 
 	//Hide the mouse cursor
 	ShowCursor(false);
+
+	//store the height and width of the window
+	m_width = width;
+	m_height = height;
 }
 /// closes this windows class
 void WindowsForm::closeWindows()
@@ -230,4 +234,18 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT uint, WPARAM wparam, LPARAM lpar
 HWND WindowsForm::getHwnd()
 {
 	return m_hwnd;
+}
+
+//returns the height of the window for this form
+int WindowsForm::GetWindowHeight()
+{
+	//return the height of the main window
+	return m_height;
+}
+
+//reutrns the width of the windows for this form
+int WindowsForm::GetWindowWidth()
+{
+	//return the width of the window
+	return m_width;
 }

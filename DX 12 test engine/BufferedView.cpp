@@ -45,14 +45,15 @@ bool BufferedView::initBufferedView(D3DInterface* handle, WindowsForm* form)
 	//create the swap chain with triple buffering
 	DXGI_MODE_DESC backBufferDesc = {};
 
-	backBufferDesc.Width = 0;
-	backBufferDesc.Height = 0;
+	//set the back buffer to the size of the windows form
+	backBufferDesc.Width = form->GetWindowWidth();
+	backBufferDesc.Height = form->GetWindowHeight();
 	backBufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
 	//describe multisampling
 	DXGI_SAMPLE_DESC sampleDesc = {};
 	//set the sample count to 2 for 2x MSAA
-	sampleDesc.Count = 2;
+	sampleDesc.Count = 1;
 
 	//describe and create the swap chain
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
@@ -67,8 +68,14 @@ bool BufferedView::initBufferedView(D3DInterface* handle, WindowsForm* form)
 	IDXGISwapChain* tempSwapChain;
 
 	//create the swap chain
-	handle->getFactory()->CreateSwapChain(handle->getCommandQueue(),
+	result =  handle->getFactory()->CreateSwapChain(handle->getCommandQueue(),
 		&swapChainDesc, &tempSwapChain);
+	if (FAILED(result))
+	{
+		//failed to create the command queue
+		MessageBox(NULL, TEXT("Failed to swap chain"), TEXT("The CreateSwapChain failed"), MB_OK);
+		return false;
+	}
 
 	//static cast the swap chain to the swapchain3
 	m_swapChain = static_cast<IDXGISwapChain3*>(tempSwapChain);
