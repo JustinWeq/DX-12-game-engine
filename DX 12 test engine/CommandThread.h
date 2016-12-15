@@ -34,6 +34,10 @@ public:
 
 	//returns the command list
 	ID3D12CommandList* getCommandList();
+
+	//waits for the last frame to finish
+	void waitForLastFrame();
+
 private:
 
 	
@@ -53,8 +57,7 @@ private:
 	// the current frame this instance of the command thread is on.
 	int m_frameIndex;
 
-    //waits for the last frame to finish
-	void waitForLastFrame();
+
 
 protected:
 

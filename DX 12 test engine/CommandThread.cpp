@@ -85,7 +85,7 @@ CommandThread::~CommandThread()
 		 //return false since the command queue failed to signal the fence
 		 return false;
 	 }
-
+	 m_frameIndex = frameIndex;
 	 return true;
  }
 
@@ -120,4 +120,47 @@ bool CommandThread::reset()
 ID3D12CommandList* CommandThread::getCommandList()
 {
 	return m_commandList;
+}
+
+// cleans up memory for the command thread
+void CommandThread::close()
+{
+	//delete the memory for the fences and the command allocators
+	for (int i = 0; i < 3; i++)
+	{
+		//release the command allocator at i
+		m_commandAllocators[i]->Release();
+		//release the fence at i
+		m_fence[i]->Release();
+	}
+
+	//delete command allocators
+	delete[] m_commandAllocators;
+	//delete fences
+	delete[] m_fence;
+}
+
+//waits for the last frame to finish
+// frameIndex- the current frame the fence is on
+void CommandThread::waitForLastFrame()
+{
+	HRESULT result;
+	
+	//if th4e current frame index is less then the fence value then the
+	// gpu has not finshed executing its command yet
+	if (m_fence[m_frameIndex]->GetCompletedValue() < m_fenceValue[m_frameIndex])
+	{
+		//have the fence create an event to be singled once the current value is the fence value
+		result = m_fence[m_frameIndex]->SetEventOnCompletion(m_fenceValue[m_frameIndex], m_fenceEvent);
+		if (FAILED(result))
+		{
+			throw "Failed to create a fence event";
+		}
+
+		//wait untill the fence has completed its event
+		WaitForSingleObject(m_fenceEvent, INFINITE);
+	}
+
+	//increment the fence value for the next frame
+	m_fenceValue[m_frameIndex]++;
 }
