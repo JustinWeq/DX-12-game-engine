@@ -4,14 +4,16 @@
 #include "BufferedView.h"
 #include "ClearRenderTargerViewCommandThread.h"
 
-void runWindowsForm();
 WindowsForm* form;
 D3DInterface* device;
 BufferedView* renderTarget;
 ClearRenderTargetViewCommandThread* commandThread;
-
+bool quit;
 int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE, LPSTR, int cmdShow)
 {
+	//set quit to false;
+	quit = false;
+
 	std::thread formThread;
 
 	//construct the objects
@@ -29,30 +31,59 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE, LPSTR, int cmdShow)
 
 	//init and run the form
 	bool result = form->initialize();
-	if (result)
+	if (!result)
 	{
-		
-
-		//set up the D3D interface
-		device->initD3D();
-
-		//set up the clear render target command thread
-		commandThread->init(device);
-
-		//set up the buffered view
-		renderTarget->initBufferedView(device, form);
-
-
-
-		//run the windows form in  a thread
-		formThread = std::thread(runWindowsForm);
-
-	    commandThread->update(2, device, renderTarget);
-
+		//failed to create windows form
+		MessageBox(0, TEXT("Failed to create windows form"), TEXT("The creation of the windows form failed"), MB_OK);
+		quit = true;
 	}
+
+	//set up the D3D interface
+	result = device->initD3D();
+	if (!result)
+	{
+		//failed to create d3d interface
+		MessageBox(0, TEXT("Failed to create d3dinterface"), TEXT("The creation of the d3d interface failed"), MB_OK);
+		quit = true;
+	}
+
+	//set up the clear render target command thread
+	result = commandThread->init(device);
+	if (!result)
+	{
+		//failed to create the clear rendertarget command thread
+		MessageBox(0, TEXT("Failed to create windows form"), TEXT("The creation of the windows form failed"), MB_OK);
+		quit = true;
+	}
+
+	//set up the buffered view
+	result = renderTarget->initBufferedView(device, form);
+	if (!result)
+	{
+		//failed to create the render target
+		MessageBox(0, TEXT("Failed to create render target"), TEXT("The creation of the render target failed"), MB_OK);
+		quit = true;
+	}
+
+	// update and render untill the program crashes or the user tells the program to quit
+	while(!quit)
+	{
+		//update the windwos form
+		quit = !form->run();
+
+
+		//update the command thread
+		quit = !commandThread->update(2, device, renderTarget);
+
+		CommandThread** commands = new CommandThread*[1];
+		commands[0] = commandThread;
+
+		//present the command threads
+		quit = !renderTarget->present(1, commands, device);
+		int text = 0;
+	}
+	commandThread->update(2, device, renderTarget);
 	
-	//sync the form thread
-	formThread.join();
 
 	//close the form
 	form->close();
@@ -72,7 +103,3 @@ int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE, LPSTR, int cmdShow)
 	return 0;
 }
 
-void runWindowsForm()
-{
-	form->run();
-}

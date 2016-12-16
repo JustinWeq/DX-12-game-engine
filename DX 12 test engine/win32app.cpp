@@ -33,8 +33,7 @@ bool WindowsForm::run()
 	ZeroMemory(&msg, sizeof(MSG));
 
 	//keep running untill the user decides to quit
-	m_quit = false;
-	while (!m_quit)
+	while (1)
 	{
 		//handle all of the windows messages
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -46,16 +45,20 @@ bool WindowsForm::run()
 		//if windows signals to quit then exit the app
 		if (msg.message == WM_QUIT)
 		{
-			m_quit = true;
+			return false;
 		}
 		else
 		{
 			//other wise process one frame
 			result = update();
+			
 			if (!result)
 			{
-				m_quit = true;
+				return false;
 			}
+
+			//return control back to the main program
+			return true;
 		}
 	}
 	return true;
