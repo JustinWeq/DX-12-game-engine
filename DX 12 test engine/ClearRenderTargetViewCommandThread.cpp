@@ -1,6 +1,6 @@
 #include "ClearRenderTargerViewCommandThread.h"
-
-
+bool red = true;
+int blue = 0;
 // a pure virtual function, this needs to be overridden with a specific class that inherits from this abstract base class,
 // it is recommended you call this function inside of a thread if you are using more then one command thread instance
 // to save compute time.
@@ -32,12 +32,13 @@ bool ClearRenderTargetViewCommandThread::update(int flags,...)
 
 	//set the render target for the output merger state
 	m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, nullptr);
-
 	//Clear the render target for the output merger state transition
-	const float clearColor[] = { 1,0,0,1 };
+	red = !red;
+	const float clearColor[] = { red,!red,(float)(blue+=1)/100.0f,1 };
+	blue %= 100;
 	m_commandList->ClearRenderTargetView(rtvHandle, clearColor, 0, nullptr);
 
-
+	
 	//transition the frame index
 	m_commandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(view->getRenderTarget(view->getFrameIndex()),
 		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT));

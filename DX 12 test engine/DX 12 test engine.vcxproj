@@ -35,6 +35,10 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="win32app.h" />
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="ColorPixelShader.fx" />
+    <FxCompile Include="ColorVertexShader.fx" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BA3E61DC-E6AB-415D-96D6-981842FDDC3A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
