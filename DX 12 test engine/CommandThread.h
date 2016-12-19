@@ -3,6 +3,7 @@
 #include "D3DInterface.h"
 
 // a class that contains methods and data for running concurrent command lists
+// this class is pure virtual and needs to have its update method overridden to be used
 class CommandThread
 {
 

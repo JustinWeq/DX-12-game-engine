@@ -9,4 +9,5 @@
 #include <DirectXMath.h>
 #include <thread>
 #include "d3dx12.h"
-
+//safe release relaese something only if it exists in the first place
+#define SAFE_RELEASE(p){ if((p)) {(p)->Release();(p) = 0;}}

@@ -24,6 +24,8 @@
     <ClCompile Include="CommandThread.cpp" />
     <ClCompile Include="D3DInterface.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RootSignature.cpp" />
+    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="win32app.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -32,12 +34,21 @@
     <ClInclude Include="CommandThread.h" />
     <ClInclude Include="D3DInterface.h" />
     <ClInclude Include="d3dx12.h" />
+    <ClInclude Include="RootSiganture.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="win32app.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ColorPixelShader.fx" />
-    <FxCompile Include="ColorVertexShader.fx" />
+    <FxCompile Include="ColorPixelShader.fx">
+      <DeploymentContent>true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="ColorVertexShader.fx">
+      <DeploymentContent>true</DeploymentContent>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{BA3E61DC-E6AB-415D-96D6-981842FDDC3A}</ProjectGuid>
